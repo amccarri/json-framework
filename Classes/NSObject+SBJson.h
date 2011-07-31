@@ -29,6 +29,9 @@
 
 #import <Foundation/Foundation.h>
 
+@class JsonCollectionMap;
+
+
 #pragma mark JSON Writing
 
 /// Adds JSON generation to NSObject
@@ -44,6 +47,25 @@
  @see @ref objc2json
  */
 - (NSString *)JSONRepresentation;
+
+/**
+ @brief Instantiates this class from a JSON string
+ 
+ @return an instance of the class with values instantiated from the json string
+ */
+- (id)initWithJson:(NSString *)json;
+
+/**
+ @brief Instnatiations this calss from a json string, using the specified collection mappings.
+ @return an instance of the class with values instantiated from the json string.  Collections are mapped 
+         accordingly if they are included in the collection mappings
+ */
+- (id)initWithJson:(NSString *)json andCollectionMaps:(JsonCollectionMap *)mapping, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ @return returns a json representation of this object, no matter what class it is
+ */
+- (NSString *)json;
 
 @end
 

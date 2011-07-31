@@ -97,6 +97,7 @@
 		
 	else if ([object respondsToSelector:@selector(proxyForJson)])
 		return [self dataWithObject:[object proxyForJson]];
+    
 	else {
 		self.error = @"Not valid type for JSON";
 		return nil;
