@@ -32,6 +32,8 @@
 #import "SBJsonParser.h"
 #import "JsonCollectionMap.h"
 
+#import <objc/runtime.h>
+
 @implementation NSObject (NSObject_SBJsonWriting)
 
 - (NSString *)JSONRepresentation {
@@ -50,6 +52,7 @@
         }
         NSString *attribs = [NSString stringWithUTF8String:property_getAttributes(prop)];
         id val = [dict valueForKey:key];
+        if (val == [NSNull null]) continue; // ignore empty values
         
         NSLog(@"%@", attribs);
         if ([attribs characterAtIndex:1] == '@' &&
@@ -105,7 +108,7 @@
 }
 
 - (id)initWithArray:(NSArray *)arr andMappings:(NSDictionary *)mappingDict {
-    NSMutableArray *newArray = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *newArray = [[NSMutableArray alloc] init];
     
     for (id obj in arr) {
         if ([self isKindOfClass:NSObject.class]) {
