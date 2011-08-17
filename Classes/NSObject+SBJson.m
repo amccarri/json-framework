@@ -48,7 +48,7 @@
     for (NSString *key in [dict keyEnumerator]) {
         objc_property_t prop = class_getProperty(self.class, [key UTF8String]);
         if (prop == nil) { // class does not match dictionary
-            @throw [NSException exceptionWithName:@"invalid json->class mapping" reason:@"class properties do not match json properties" userInfo:nil];
+            continue;
         }
         NSString *attribs = [NSString stringWithUTF8String:property_getAttributes(prop)];
         id val = [dict valueForKey:key];
