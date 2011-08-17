@@ -15,7 +15,6 @@
 		88B051D713E4784C00C379EC /* TestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B051D513E4784C00C379EC /* TestObj.m */; };
 		88B051D813E4784C00C379EC /* TestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B051D513E4784C00C379EC /* TestObj.m */; };
 		88B051DF13E478F600C379EC /* IntrospectiveJsonTests.h in Headers */ = {isa = PBXBuildFile; fileRef = 88B051DD13E478F600C379EC /* IntrospectiveJsonTests.h */; };
-		88B051E013E478F600C379EC /* IntrospectiveJsonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B051DE13E478F600C379EC /* IntrospectiveJsonTests.m */; };
 		88B051E113E478F600C379EC /* IntrospectiveJsonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B051DE13E478F600C379EC /* IntrospectiveJsonTests.m */; };
 		88B051E213E47AE700C379EC /* IntrospectiveJsonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B051DE13E478F600C379EC /* IntrospectiveJsonTests.m */; };
 		88B051E313E47DF900C379EC /* TestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B051D513E4784C00C379EC /* TestObj.m */; };
@@ -624,7 +623,6 @@
 				BC8851551391D6CD00370E55 /* SBJsonWriter.m in Sources */,
 				BC8851571391D6CD00370E55 /* SBJsonUTF8Stream.m in Sources */,
 				88B051D713E4784C00C379EC /* TestObj.m in Sources */,
-				88B051E013E478F600C379EC /* IntrospectiveJsonTests.m in Sources */,
 				88B051F013E48FEB00C379EC /* TestComplexObj.m in Sources */,
 				8824D04913E5BB240023B757 /* JsonCollectionMap.m in Sources */,
 			);
