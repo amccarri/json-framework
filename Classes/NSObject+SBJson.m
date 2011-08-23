@@ -54,7 +54,6 @@
         id val = [dict valueForKey:key];
         if (val == [NSNull null]) continue; // ignore empty values
         
-        NSLog(@"%@", attribs);
         if ([attribs characterAtIndex:1] == '@' &&
             ![val isKindOfClass:NSString.class]) {
             NSArray *propsArray = [attribs componentsSeparatedByString:@","];
