@@ -97,7 +97,6 @@
                 Class c = objc_getClass([className UTF8String]);
                 NSDictionary *valueDict = [dict valueForKey:key];
                 [self setValue:[[[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary] autorelease] forKey:key];
-                NSLog(@"%s is a %@", property_getName(prop), className);
             }
         } else {
             [self setValue:val forKey:key];
