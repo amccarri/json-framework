@@ -165,6 +165,8 @@
         return arr;
     } else if ([self isKindOfClass:NSString.class]) {
         return self;
+    } else if ([self isKindOfClass:NSNumber.class]) {
+        return [(NSNumber *)self stringValue];
     } else {
         unsigned int propCount;
         objc_property_t *props = class_copyPropertyList(self.class, &propCount);
