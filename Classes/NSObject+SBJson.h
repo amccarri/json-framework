@@ -67,6 +67,8 @@
  */
 - (NSString *)json;
 
+- (id)asJsonCompatibleObject;
+
 @end
 
 
