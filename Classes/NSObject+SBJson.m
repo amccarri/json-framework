@@ -45,6 +45,7 @@
 }
 
 - (id)initWithDictionary:(NSDictionary *)dict andMappings:(NSDictionary *)mappingDictionary {
+    NSLog(@"%@", dict);
     for (NSString *key in [dict keyEnumerator]) {
         objc_property_t prop = class_getProperty(self.class, [key UTF8String]);
         if (prop == nil) { // class does not match dictionary
@@ -93,7 +94,10 @@
                     [self setValue:newDict forKey:key];
                     [newDict release];
                 }
+            } else if ([className isEqualToString:@"NSString"]) {
+                [self setValue:val forKey:key];
             } else {
+                NSLog(@"class: %@", className);
                 Class c = objc_getClass([className UTF8String]);
                 NSDictionary *valueDict = [dict valueForKey:key];
                 [self setValue:[[[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary] autorelease] forKey:key];
