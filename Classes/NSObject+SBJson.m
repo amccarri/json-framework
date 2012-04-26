@@ -96,6 +96,8 @@
                 }
             } else if ([className isEqualToString:@"NSString"]) {
                 [self setValue:val forKey:key];
+            } else if ([className isEqualToString:@"NSDecimalNumber"]) {
+                [self setValue:val forKey:key];
             } else {
                 NSLog(@"class: %@", className);
                 Class c = objc_getClass([className UTF8String]);
