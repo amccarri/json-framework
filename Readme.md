@@ -1,3 +1,7 @@
+HomeAway SBJson
+===============
+HomeAway SBJson is a modification of SBJson that adds reflective serialization/deserialization between JSON strings and Objective-C classes.
+
 SBJson (aka json-framework)
 ===========================
 
