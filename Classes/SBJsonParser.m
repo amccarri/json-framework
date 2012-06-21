@@ -43,10 +43,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [error release];
-    [super dealloc];
-}
 
 #pragma mark Methods
 
@@ -57,9 +53,9 @@
         return nil;
     }
 
-	SBJsonStreamParserAccumulator *accumulator = [[[SBJsonStreamParserAccumulator alloc] init] autorelease];
+	SBJsonStreamParserAccumulator *accumulator = [[SBJsonStreamParserAccumulator alloc] init];
     
-	SBJsonStreamParser *parser = [[[SBJsonStreamParser alloc] init] autorelease];
+	SBJsonStreamParser *parser = [[SBJsonStreamParser alloc] init];
 	parser.maxDepth = self.maxDepth;
 	parser.delegate = accumulator;
 	

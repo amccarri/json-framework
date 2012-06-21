@@ -22,9 +22,9 @@
 @property (nonatomic, assign) int myInt;
 @property (nonatomic, assign) double myDouble;
 @property (nonatomic, assign) BOOL myBool;
-@property (nonatomic, retain) NSArray *myArray;
-@property (nonatomic, retain) TestObj *myTestObj;
-@property (nonatomic, retain) NSDictionary *myDictionary;
+@property (nonatomic, strong) NSArray *myArray;
+@property (nonatomic, strong) TestObj *myTestObj;
+@property (nonatomic, strong) NSDictionary *myDictionary;
 
 - (id)initWithTestData;
 

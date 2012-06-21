@@ -80,14 +80,6 @@ static NSNull *kNull;
 	return self;
 }
 
-- (void)dealloc {
-    [keyStack release];
-	[stack release];
-    [error release];
-	[stateStack release];
-	[tokeniser release];
-	[super dealloc];
-}
 
 #pragma mark Methods
 
@@ -143,7 +135,7 @@ static NSNull *kNull;
 }
 
 - (void)maxDepthError {
-    self.error = [NSString stringWithFormat:@"Input depth exceeds max depth of %lu", maxDepth];
+    self.error = [NSString stringWithFormat:@"Input depth exceeds max depth of %u", maxDepth];
     self.state = [SBJsonStreamParserStateError sharedInstance];
 }
 
@@ -204,7 +196,6 @@ static NSNull *kNull;
 	if (++depth > levelsToSkip) {
 		dict = [[NSMutableDictionary alloc] init];
 		[stack addObject:dict];
-        [dict release];
         
 		currentType = SBJsonStreamParserObject;
 	}
@@ -216,10 +207,9 @@ static NSNull *kNull;
     [state parser:self shouldTransitionTo:tok];
 
 	if (depth-- > levelsToSkip) {
-		id value = [dict retain];
+		id value = dict;
 		[self pop];
 		[self parserFoundObject:value];
-		[value release];
 	}
 }
 
@@ -236,7 +226,6 @@ static NSNull *kNull;
 	if (++depth > levelsToSkip) {
 		array = [[NSMutableArray alloc] init];
 		[stack addObject:array];
-        [array release];
         
 		currentType = SBJsonStreamParserArray;
 	}
@@ -248,10 +237,9 @@ static NSNull *kNull;
     [state parser:self shouldTransitionTo:tok];
 
 	if (depth-- > levelsToSkip) {
-		id value = [array retain];
+		id value = array;
 		[self pop];
 		[self parserFoundObject:value];
-		[value release];
 	}
 }
 

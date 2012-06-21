@@ -33,8 +33,6 @@
     STAssertNotNil(incoming, @"should not have returned a nil class");
     STAssertNotNil(incoming.foo, @"foo should not be nil");
     STAssertNotNil(incoming.bar, @"foo should not be bar");
-    [outgoing release];
-    [incoming release];
 }
 
 - (void)testMarshallingSimple {
@@ -55,7 +53,6 @@
     STAssertEqualObjects([incoming valueForKey:@"foo"], outgoing.foo, @"foo should match outgoing value");
     STAssertEqualObjects([incoming valueForKey:@"bar"], outgoing.bar, @"bar should match outgoing value");
     
-    [outgoing release];
 }
 
 - (NSString *)buildComplexJson {
@@ -65,19 +62,16 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setValue:obj2 forKey:@"aComplexObject"];
     obj.myDictionary = dict;
-    [dict release];
     
     
     NSString *json = [obj json];
-    [obj release];
-    [obj2 release];
     return json;
 }
 
 - (NSMutableArray *)buildTestArray {
-  NSMutableArray *arr = [[[NSMutableArray alloc] init] autorelease];
-    [arr addObject:[[[TestComplexObj alloc] initWithTestData] autorelease]];
-    [arr addObject:[[[TestComplexObj alloc] initWithTestData] autorelease]];
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
+    [arr addObject:[[TestComplexObj alloc] initWithTestData]];
+    [arr addObject:[[TestComplexObj alloc] initWithTestData]];
   return arr;
 }
 
@@ -133,13 +127,11 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setValue:obj2 forKey:@"aComplexObject"];
     obj.myDictionary = dict;
-    [dict release];
     
     
     NSString *json = [obj json];
     NSLog(@"%@", json);
     
-    [obj release];
 }
 
 @end

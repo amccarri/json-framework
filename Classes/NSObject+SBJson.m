@@ -37,7 +37,7 @@
 @implementation NSObject (NSObject_SBJsonWriting)
 
 - (NSString *)JSONRepresentation {
-    SBJsonWriter *writer = [[[SBJsonWriter alloc] init] autorelease];    
+    SBJsonWriter *writer = [[SBJsonWriter alloc] init];    
     NSString *json = [writer stringWithObject:self];
     if (!json)
         NSLog(@"-JSONRepresentation failed. Error is: %@", writer.error);
@@ -74,10 +74,8 @@
                             newVal = [[c alloc] initWithDictionary:obj andMappings:mappingDictionary];
                         }
                         [newArr addObject:newVal];
-                        [newVal release];
                     }
                     [self setValue:newArr forKey:key];
-                    [newArr release];
                 }
             } else if ([className isEqualToString:@"NSDictionary"]) { 
                 Class c = [mappingDictionary valueForKey:key];
@@ -89,10 +87,8 @@
                         NSDictionary *valueDict = [val valueForKey:subkey];
                         id newVal = [[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary];
                         [newDict setValue:newVal forKey:subkey];
-                        [newVal release];
                     }
                     [self setValue:newDict forKey:key];
-                    [newDict release];
                 }
             } else if ([className isEqualToString:@"NSString"]) {
                 [self setValue:val forKey:key];
@@ -102,7 +98,7 @@
                 NSLog(@"class: %@", className);
                 Class c = objc_getClass([className UTF8String]);
                 NSDictionary *valueDict = [dict valueForKey:key];
-                [self setValue:[[[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary] autorelease] forKey:key];
+                [self setValue:[[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary] forKey:key];
             }
         } else {
             [self setValue:val forKey:key];
@@ -142,26 +138,25 @@
         id jsonVal = [json JSONValue];
         if ([jsonVal isKindOfClass:NSDictionary.class]) {
             NSDictionary *d = (NSDictionary *)jsonVal;
-            [self initWithDictionary:d andMappings:mappingDict];
+            if (!(self = [self initWithDictionary:d andMappings:mappingDict])) return nil;
         } else if ([jsonVal isKindOfClass:NSArray.class]) {
             NSArray *arr = (NSArray *)jsonVal;
             return [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
         }
-        [mappingDict release];
     }
     return self;    
 }
 
 - (id)asJsonCompatibleObject {
     if ([self isKindOfClass:NSDictionary.class]) {
-        NSMutableDictionary *newDict = [[[NSMutableDictionary alloc] init] autorelease];
+        NSMutableDictionary *newDict = [[NSMutableDictionary alloc] init];
         for (NSString *key in [(NSDictionary *)self keyEnumerator]) {
             NSObject *oldVal = [(NSDictionary *)self objectForKey:key];
             [newDict setValue:[oldVal asJsonCompatibleObject] forKey:key];
         }
         return newDict;
     } else if ([self isKindOfClass:NSArray.class]) {
-        NSMutableArray *arr = [[[NSMutableArray alloc] init] autorelease];
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
         int count = ((NSArray *)self).count;
         NSArray *selfAsArray = (NSArray *)self;
         for (int j = 0; j < count; j++) {
@@ -176,7 +171,7 @@
     } else {
         unsigned int propCount;
         objc_property_t *props = class_copyPropertyList(self.class, &propCount);
-        NSMutableDictionary *d = [[[NSMutableDictionary alloc] init] autorelease];
+        NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
         for (int i = 0; i < propCount; i++) {
             objc_property_t prop = props[i];
             NSString *propName = [NSString stringWithUTF8String:property_getName(prop)];
@@ -205,7 +200,7 @@
 @implementation NSString (NSString_SBJsonParsing)
 
 - (id)JSONValue {
-    SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
+    SBJsonParser *parser = [[SBJsonParser alloc] init];
     id repr = [parser objectWithString:self];
     if (!repr)
         NSLog(@"-JSONValue failed. Error is: %@", parser.error);
