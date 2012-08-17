@@ -56,11 +56,25 @@
 - (id)initWithJson:(NSString *)json;
 
 /**
+ @brief Create your class from a dict or array of parsed json
+*/
+- (id)initWithJsonValue:(id)jsonValue;
+
+
+
+/**
  @brief Instnatiations this calss from a json string, using the specified collection mappings.
  @return an instance of the class with values instantiated from the json string.  Collections are mapped 
          accordingly if they are included in the collection mappings
  */
 - (id)initWithJson:(NSString *)json andCollectionMaps:(JsonCollectionMap *)mapping, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ @brief Takes a Dict/Array from a parsed jason string and the mappings.
+ */
+- (id)initWithJsonValue:(id)jsonVal andCollectionMaps:(JsonCollectionMap *)mapping, ...NS_REQUIRES_NIL_TERMINATION;
+
+
 
 /**
  @return returns a json representation of this object, no matter what class it is

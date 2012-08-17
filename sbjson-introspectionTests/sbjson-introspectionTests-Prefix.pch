@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'sbjson-introspectionTests' target in the 'sbjson-introspectionTests' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
