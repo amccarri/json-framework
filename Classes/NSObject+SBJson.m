@@ -150,8 +150,10 @@
             [self initWithDictionary:d andMappings:mappingDict];
         } else if ([jsonValue isKindOfClass:NSArray.class]) {
             NSArray *arr = (NSArray *)jsonValue;
-            return [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
-        }
+            [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
+            [mappingDict release];
+            return self;
+         }
         [mappingDict release];
     }
     return self;
