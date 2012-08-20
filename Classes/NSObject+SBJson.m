@@ -44,6 +44,9 @@
     return json;
 }
 
+
+#pragma mark - Core Creation Methods
+
 - (id)initWithDictionary:(NSDictionary *)dict andMappings:(NSDictionary *)mappingDictionary {
     NSLog(@"%@", dict);
     for (NSString *key in [dict keyEnumerator]) {
@@ -124,33 +127,82 @@
     return newArray;
 }
 
+
+#pragma mark - Designated Init
+
+/**
+ Interal constructor that takes a dict/array from a parsed json string and a started va_list.
+ 
+ Will close this list for you.
+ */
+-(id)initWIthJsonValueInternal:(id)jsonValue collectionMap:(JsonCollectionMap *) mapping  andVarArgs:(va_list)argList{
+    self = [self init];
+    if (self) {
+        NSMutableDictionary *mappingDict = [[NSMutableDictionary alloc] init];
+        if (argList) { // build the mapping dictionary
+            for (JsonCollectionMap *singleMap = mapping; singleMap != nil; singleMap = va_arg(argList, JsonCollectionMap *)) {
+                [mappingDict setValue:singleMap.clazz forKey:singleMap.fieldName];
+            }
+            va_end(argList);
+        }
+        if ([jsonValue isKindOfClass:NSDictionary.class]) {
+            NSDictionary *d = (NSDictionary *)jsonValue;
+            [self initWithDictionary:d andMappings:mappingDict];
+        } else if ([jsonValue isKindOfClass:NSArray.class]) {
+            NSArray *arr = (NSArray *)jsonValue;
+            [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
+            [mappingDict release];
+            return self;
+         }
+        [mappingDict release];
+    }
+    return self;
+    
+}
+
+
+
+
+#pragma mark - Easy Inits
+
+/**
+ Intermediate constuctor that converts the var args to a data structure for final consumption.
+ */
+- (id)initWithJson:(NSString *)jsonStr andCollectionMaps:(JsonCollectionMap *)mapping, ... {
+    // parse that json string
+    id jsonVal = [jsonStr JSONValue];
+    va_list vaArgs;
+    va_start(vaArgs, mapping);
+    return [self initWIthJsonValueInternal:jsonVal collectionMap:mapping andVarArgs:vaArgs];
+}
+
+
+/**
+ Intermediate constuctor that converts the var args to a data structure for final consumption.
+ */
+- (id)initWithJsonValue:(id)jsonVal andCollectionMaps:(JsonCollectionMap *)mapping, ...{
+    va_list vaArgs;
+    va_start(vaArgs, mapping);
+    return [self initWIthJsonValueInternal:jsonVal collectionMap:mapping andVarArgs:vaArgs];
+}
+
+
+
 - (id)initWithJson:(NSString *)json {
     return [self initWithJson:json andCollectionMaps:nil, nil];
 }
 
-- (id)initWithJson:(NSString *)json andCollectionMaps:(JsonCollectionMap *)mapping, ... {
-    self = [self init];
-    if (self) {
-        NSMutableDictionary *mappingDict = [[NSMutableDictionary alloc] init];
-        if (mapping) { // build the mapping dictionary
-            va_list args;
-            va_start(args, mapping);
-            for (JsonCollectionMap *singleMap = mapping; singleMap != nil; singleMap = va_arg(args, JsonCollectionMap *)) {
-                [mappingDict setValue:singleMap.clazz forKey:singleMap.fieldName];
-            }
-        }
-        id jsonVal = [json JSONValue];
-        if ([jsonVal isKindOfClass:NSDictionary.class]) {
-            NSDictionary *d = (NSDictionary *)jsonVal;
-            [self initWithDictionary:d andMappings:mappingDict];
-        } else if ([jsonVal isKindOfClass:NSArray.class]) {
-            NSArray *arr = (NSArray *)jsonVal;
-            return [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
-        }
-        [mappingDict release];
-    }
-    return self;    
+
+-(id)initWithJsonValue:(id)jsonValue {
+    return [self initWithJsonValue:jsonValue andCollectionMaps:nil,nil];
 }
+
+
+
+
+
+
+
 
 - (id)asJsonCompatibleObject {
     if ([self isKindOfClass:NSDictionary.class]) {
