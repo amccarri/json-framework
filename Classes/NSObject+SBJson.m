@@ -152,7 +152,8 @@
             NSArray *arr = (NSArray *)jsonValue;
             [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
             [mappingDict release];
-            return self;
+            // Return the new array
+            return arr;
          }
         [mappingDict release];
     }
