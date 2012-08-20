@@ -10,14 +10,7 @@
 
 @class TestObj;
 
-@interface TestComplexObj : NSObject {
-    int myInt;
-    double myDouble;
-    NSArray *myArray;
-    TestObj *myTestObj;
-    NSDictionary *myDictionary;
-    BOOL myBool;
-}
+@interface TestComplexObj : NSObject 
 
 @property (nonatomic, assign) int myInt;
 @property (nonatomic, assign) double myDouble;
@@ -25,6 +18,7 @@
 @property (nonatomic, retain) NSArray *myArray;
 @property (nonatomic, retain) TestObj *myTestObj;
 @property (nonatomic, retain) NSDictionary *myDictionary;
+@property (nonatomic, copy) NSDecimalNumber *decimalNumber;
 
 - (id)initWithTestData;
 

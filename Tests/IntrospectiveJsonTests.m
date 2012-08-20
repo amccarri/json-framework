@@ -118,6 +118,7 @@
     
     STAssertEquals(obj.myInt, 7, @"int value not correct");
     STAssertEquals(obj.myDouble, 22.2, @"double values do not match");
+    STAssertTrue([obj.decimalNumber compare:[NSDecimalNumber decimalNumberWithString:@"25.5"]] == NSOrderedSame, @"decimal number has unexpected value");
     STAssertNotNil(obj.myTestObj, @"test object should not be nil");
     STAssertTrue([obj.myTestObj isKindOfClass:TestObj.class], @"associate class is not an instance of it's actual class");
     STAssertNotNil(obj.myDictionary, @"dictionary should not be nil");

@@ -17,13 +17,6 @@
 
 @implementation TestComplexObj
 
-@synthesize myInt;
-@synthesize myDouble;
-@synthesize myArray;
-@synthesize myTestObj;
-@synthesize myBool;
-@synthesize myDictionary;
-
 - (id)init
 {
     self = [super init];
@@ -41,6 +34,7 @@
         self.myArray = [self buildArray];
         self.myTestObj = [self buildTestObj];
         self.myBool = NO;
+        self.decimalNumber = [NSDecimalNumber decimalNumberWithString:@"25.5"];
     }
     return self;
 }
