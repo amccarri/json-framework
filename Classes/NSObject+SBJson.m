@@ -149,11 +149,11 @@
             NSDictionary *d = (NSDictionary *)jsonValue;
             [self initWithDictionary:d andMappings:mappingDict];
         } else if ([jsonValue isKindOfClass:NSArray.class]) {
-            NSArray *arr = (NSArray *)jsonValue;
-            [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
+            id out = [self initWithArray:jsonValue andMappings:mappingDict]; // return an array of selves, rather than a single self
+            // let go of the mapping dict.
             [mappingDict release];
             // Return the new array
-            return arr;
+            return out;
          }
         [mappingDict release];
     }
@@ -215,9 +215,9 @@
         return newDict;
     } else if ([self isKindOfClass:NSArray.class]) {
         NSMutableArray *arr = [[[NSMutableArray alloc] init] autorelease];
-        int count = ((NSArray *)self).count;
+        long count = ((NSArray *)self).count;
         NSArray *selfAsArray = (NSArray *)self;
-        for (int j = 0; j < count; j++) {
+        for (long j = 0; j < count; j++) {
             id arrayObj = [selfAsArray objectAtIndex:j];
             [arr addObject:[arrayObj asJsonCompatibleObject]];
         }
