@@ -215,9 +215,9 @@
         return newDict;
     } else if ([self isKindOfClass:NSArray.class]) {
         NSMutableArray *arr = [[[NSMutableArray alloc] init] autorelease];
-        int count = ((NSArray *)self).count;
+        long count = ((NSArray *)self).count;
         NSArray *selfAsArray = (NSArray *)self;
-        for (int j = 0; j < count; j++) {
+        for (long j = 0; j < count; j++) {
             id arrayObj = [selfAsArray objectAtIndex:j];
             [arr addObject:[arrayObj asJsonCompatibleObject]];
         }
