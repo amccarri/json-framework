@@ -149,11 +149,11 @@
             NSDictionary *d = (NSDictionary *)jsonValue;
             [self initWithDictionary:d andMappings:mappingDict];
         } else if ([jsonValue isKindOfClass:NSArray.class]) {
-            NSArray *arr = (NSArray *)jsonValue;
-            [self initWithArray:arr andMappings:mappingDict]; // return an array of selves, rather than a single self
+            id out = [self initWithArray:jsonValue andMappings:mappingDict]; // return an array of selves, rather than a single self
+            // let go of the mapping dict.
             [mappingDict release];
             // Return the new array
-            return arr;
+            return out;
          }
         [mappingDict release];
     }
