@@ -8,13 +8,13 @@
 #
 Pod::Spec.new do |s|
   s.name         = "HomeAway-SBJson"
-  s.version      = "1.0.4"
+  s.version      = "1.0.5"
   s.summary      = "HomeAway customized version of SBJson that adds introspective marshalling/unmarshalling."
   s.homepage     = "http://github.wvrgroup.internal/MobileApps/SBJson"
 
   s.author       = { "Alex McCarrier" => "amccarrier@homeaway.com" }
 
-  s.source       = { :git => "git@github.wvrgroup.internal:MobileApps/SBJson.git", :tag => "1.0.4" }
+  s.source       = { :git => "git@github.wvrgroup.internal:MobileApps/SBJson.git", :tag => "1.0.5" }
   s.source_files = 'Classes/**/*.{h,m}'
 
   s.public_header_files = 'Classes/**/*.h'

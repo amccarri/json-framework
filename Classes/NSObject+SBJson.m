@@ -47,25 +47,9 @@
 
 #pragma mark - Core Creation Methods
 
-- (id)initWithDictionary:(NSDictionary *)dict andMappings:(NSDictionary *)mappingDictionary {
-    NSLog(@"%@", dict);
-    for (NSString *key in [dict keyEnumerator]) {
-        objc_property_t prop = class_getProperty(self.class, [key UTF8String]);
-        if (prop == nil) { // class does not match dictionary
-            continue;
-        }
-        NSString *attribs = [NSString stringWithUTF8String:property_getAttributes(prop)];
-        id val = [dict valueForKey:key];
-        if (val == [NSNull null]) continue; // ignore empty values
-        
-        if ([attribs characterAtIndex:1] == '@' &&
-            ![val isKindOfClass:NSString.class]) {
-            NSArray *propsArray = [attribs componentsSeparatedByString:@","];
-            NSString *classDescription = [propsArray objectAtIndex:0];
-            NSString *className = [[classDescription componentsSeparatedByString:@"\""] objectAtIndex:1];
-            if ([className isEqualToString:@"NSArray"]) {
-                Class c = [mappingDictionary valueForKey:key];
-                if (c == nil) {
+- (void)parseArray:(NSDictionary *)mappingDictionary key:(NSString *)key val:(id)val {
+    Class c = [mappingDictionary valueForKey:key];
+    if (c == nil) {
                     [self setValue:val forKey:key];
                 } else {
                     NSMutableArray *newArr = [[NSMutableArray alloc] init];
@@ -82,9 +66,11 @@
                     [self setValue:newArr forKey:key];
                     [newArr release];
                 }
-            } else if ([className isEqualToString:@"NSDictionary"]) { 
-                Class c = [mappingDictionary valueForKey:key];
-                if (c == nil) {
+}
+
+- (void)parseDictionary:(NSDictionary *)mappingDictionary key:(NSString *)key val:(id)val {
+    Class c = [mappingDictionary valueForKey:key];
+    if (c == nil) {
                     [self setValue:val forKey:key];
                 } else {
                     NSMutableDictionary *newDict = [[NSMutableDictionary alloc] init];
@@ -97,15 +83,40 @@
                     [self setValue:newDict forKey:key];
                     [newDict release];
                 }
+}
+
+- (void)parseObject:(NSDictionary *)dict mappingDictionary:(NSDictionary *)mappingDictionary key:(NSString *)key className:(NSString *)className {
+    NSLog(@"class: %@", className);
+    Class c = objc_getClass([className UTF8String]);
+    NSDictionary *valueDict = [dict valueForKey:key];
+    [self setValue:[[[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary] autorelease] forKey:key];
+}
+
+- (id)initWithDictionary:(NSDictionary *)dict andMappings:(NSDictionary *)mappingDictionary {
+    NSLog(@"%@", dict);
+    for (NSString *key in [dict keyEnumerator]) {
+        objc_property_t prop = class_getProperty(self.class, [key UTF8String]);
+        if (prop == nil) { // class does not match dictionary
+            continue;
+        }
+        NSString *attribs = [NSString stringWithUTF8String:property_getAttributes(prop)];
+        id val = [dict valueForKey:key];
+        if (val == [NSNull null]) continue; // ignore empty values
+        
+        if ([attribs characterAtIndex:1] == '@') {
+            NSArray *propsArray = [attribs componentsSeparatedByString:@","];
+            NSString *classDescription = [propsArray objectAtIndex:0];
+            NSString *className = [[classDescription componentsSeparatedByString:@"\""] objectAtIndex:1];
+            if ([className isEqualToString:@"NSArray"]) {
+                [self parseArray:mappingDictionary key:key val:val];
+            } else if ([className isEqualToString:@"NSDictionary"]) {
+                [self parseDictionary:mappingDictionary key:key val:val];
             } else if ([className isEqualToString:@"NSString"]) {
                 [self setValue:val forKey:key];
             } else if ([className isEqualToString:@"NSDecimalNumber"]) {
                 [self setValue:[NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%@", val]] forKey:key];
             } else {
-                NSLog(@"class: %@", className);
-                Class c = objc_getClass([className UTF8String]);
-                NSDictionary *valueDict = [dict valueForKey:key];
-                [self setValue:[[[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary] autorelease] forKey:key];
+                [self parseObject:dict mappingDictionary:mappingDictionary key:key className:className];
             }
         } else {
             [self setValue:val forKey:key];
