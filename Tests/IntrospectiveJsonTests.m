@@ -83,7 +83,7 @@
 
 - (void)testArrayCreation {
     NSString *json = [[self buildTestArray] json];
-    NSArray *arrayOfComplexObjs = [[TestComplexObj alloc] initWithJson:json];
+    NSArray *arrayOfComplexObjs = (NSArray *)[[TestComplexObj alloc] initWithJson:json];
     STAssertTrue([arrayOfComplexObjs count] == 2, @"should be 2 entries in array");
 }
 

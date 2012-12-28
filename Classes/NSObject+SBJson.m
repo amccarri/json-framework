@@ -27,12 +27,17 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// NOTE: Define: SBJSON_DEBUG  to enable some basic debug logging.
+
+
 #import "NSObject+SBJson.h"
 #import "SBJsonWriter.h"
 #import "SBJsonParser.h"
 #import "JsonCollectionMap.h"
 
 #import <objc/runtime.h>
+
+
 
 @implementation NSObject (NSObject_SBJsonWriting)
 
@@ -86,14 +91,18 @@
 }
 
 - (void)parseObject:(NSDictionary *)dict mappingDictionary:(NSDictionary *)mappingDictionary key:(NSString *)key className:(NSString *)className {
+#ifdef SBJSON_DEBUG
     NSLog(@"class: %@", className);
+#endif
     Class c = objc_getClass([className UTF8String]);
     NSDictionary *valueDict = [dict valueForKey:key];
     [self setValue:[[[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary] autorelease] forKey:key];
 }
 
 - (id)initWithDictionary:(NSDictionary *)dict andMappings:(NSDictionary *)mappingDictionary {
+    // #ifdef SBJSON_DEBUG
     NSLog(@"%@", dict);
+    // #endif
     for (NSString *key in [dict keyEnumerator]) {
         objc_property_t prop = class_getProperty(self.class, [key UTF8String]);
         if (prop == nil) { // class does not match dictionary
