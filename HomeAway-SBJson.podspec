@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.author       = { "Alex McCarrier" => "amccarrier@homeaway.com" }
 
-  s.source       = { :git => "git@github.wvrgroup.internal:MobileApps/SBJson.git", :tag => "1.0.5" }
+  s.source       = { :git => "git@github.wvrgroup.internal:MobileApps/SBJson.git", :tag => "#{s.version}" }
   s.source_files = 'Classes/**/*.{h,m}'
 
   s.public_header_files = 'Classes/**/*.h'
