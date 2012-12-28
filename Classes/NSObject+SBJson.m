@@ -100,9 +100,9 @@
 }
 
 - (id)initWithDictionary:(NSDictionary *)dict andMappings:(NSDictionary *)mappingDictionary {
-    // #ifdef SBJSON_DEBUG
+#ifdef SBJSON_DEBUG
     NSLog(@"%@", dict);
-    // #endif
+#endif
     for (NSString *key in [dict keyEnumerator]) {
         objc_property_t prop = class_getProperty(self.class, [key UTF8String]);
         if (prop == nil) { // class does not match dictionary
