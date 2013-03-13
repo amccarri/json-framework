@@ -124,6 +124,11 @@
                 [self setValue:val forKey:key];
             } else if ([className isEqualToString:@"NSDecimalNumber"]) {
                 [self setValue:[NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%@", val]] forKey:key];
+            } else if ([className isEqualToString:@"NSDate"]) {
+                NSDate *date = [self parseDate:val];
+                if (date) {
+                    [self setValue:date forKey:key];
+                }
             } else {
                 [self parseObject:dict mappingDictionary:mappingDictionary key:key className:className];
             }
@@ -132,6 +137,33 @@
         }
     }
     return self;
+}
+
+- (NSDate *)parseDate:(NSString *)dateString {
+    NSArray *dateFormats = @[
+                             @"yyyy-MM-dd",
+                             @"yyyy-MM-dd'T'HH:mm:ssZ"
+                             ];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    NSDate *result = nil;
+    for (NSString *f in dateFormats) {
+        fmt.dateFormat = f;
+        @try {
+            result = [fmt dateFromString:dateString];
+            break;
+        } @catch (NSException *e) {
+            NSLog(@"date format did not match %@", f);
+        }
+    }
+    return result;
+}
+
+- (NSString *)iso8601DateString:(NSDate *)date {
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    fmt.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
+    return [fmt stringFromDate:date];
 }
 
 - (id)initWithArray:(NSArray *)arr andMappings:(NSDictionary *)mappingDict {
@@ -246,6 +278,8 @@
         return self;
     } else if ([self isKindOfClass:NSNumber.class]) {
         return [(NSNumber *)self stringValue];
+    } else if ([self isKindOfClass:NSDate.class]) {
+        return [self iso8601DateString:(NSDate *)self];
     } else {
         unsigned int propCount;
         objc_property_t *props = class_copyPropertyList(self.class, &propCount);

@@ -8,7 +8,7 @@
 #
 Pod::Spec.new do |s|
   s.name         = "HomeAway-SBJson"
-  s.version      = "1.0.9"
+  s.version      = "1.0.10"
   s.summary      = "HomeAway customized version of SBJson that adds introspective marshalling/unmarshalling."
   s.homepage     = "http://github.wvrgroup.internal/MobileApps/SBJson"
 
