@@ -1,6 +1,6 @@
 HomeAway SBJson
 ===============
-HomeAway SBJson is a modification of SBJson that adds reflective serialization/deserialization between JSON strings and Objective-C classes.  It was inspired by Java JSON parsing libraries like Jackson and SOJO.  The idea is to make JSON parsing easier by not requiring the developer to remember what the contents of the dictionary are going to look like at runtime, and instead just use a set of well known DTOs which the parser will unmarshall from JSON.
+HomeAway SBJson is a modification of SBJson that adds reflective serialization/deserialization between JSON strings and Objective-C classes.  It was inspired by Java JSON parsing libraries like [Jackson](http://jackson.codehaus.org) and [SOJO](http://sojo.sourceforge.net/guide/user/object-interchange.html).  The idea is to make JSON parsing easier by not requiring the developer to remember what the contents of the dictionary are going to look like at runtime, and instead just use a set of well known DTOs which the parser will unmarshall from JSON.
 
 ### Examples of using the Reflective Parser
 
