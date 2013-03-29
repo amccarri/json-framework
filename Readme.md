@@ -55,7 +55,7 @@ The caveat with this approach is that your mappings will apply to all properties
 
 If the result is just a simple array and not necessarily an object:
 
-NSArray *arrayOfDingus = [[NSDingus alloc] initWithArray:jsonArrayString andMappings:...collection maps...];
+	NSArray *arrayOfDingus = [[NSDingus alloc] initWithArray:jsonArrayString andMappings:...collection maps...];
 
 SBJson (aka json-framework)
 ===========================
