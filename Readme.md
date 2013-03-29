@@ -1,6 +1,61 @@
 HomeAway SBJson
 ===============
-HomeAway SBJson is a modification of SBJson that adds reflective serialization/deserialization between JSON strings and Objective-C classes.
+HomeAway SBJson is a modification of SBJson that adds reflective serialization/deserialization between JSON strings and Objective-C classes.  It was inspired by Java JSON parsing libraries like Jackson and SOJO.  The idea is to make JSON parsing easier by not requiring the developer to remember what the contents of the dictionary are going to look like at runtime, and instead just use a set of well known DTOs which the parser will unmarshall from JSON.
+
+### Examples of using the Reflective Parser
+
+#### The Base Case
+The simplest case JSON parsing is a class with a flat structure that only includes simple objects as properties (no dictionaries, arrays, or sets).
+
+	@interface MyFlatObj : NSOjbect
+	@property (nonatomic, copy) NSString *someStringObject;
+	@property (nonatomic, copy) NSString *someOtherStringObject;
+	@property (nonatomic, strong) MyOtherObj *someOtherCustomObject;
+	@end
+	
+Converting to and from JSON:
+
+	// read from JSON
+	MyFlatObj *obj = [[MyFlatObj alloc] initWithJson:aJsonString];
+	
+	// output json
+	[obj json];
+	
+#### Classes with collection properties
+Dealing with collection classes are tricker since Objective-C does not have a notion of generic types there is no way to automatically have the parser determine the type of object that should fill the array, so you have to provide hints if your object that you are unmarshalling to contains such a beast.  For example:
+
+	@interface MyComplexObj : NSObj
+	@property (nonatomic, strong) MyOtherObj *easyOtherObjToMap
+	@property (nonatomic, strong) NSArray *arrayOfDingus;
+	@property (nonatomic, strong) NSArray *arrayOfFoo;
+	@end
+	
+	// mapping the dingus
+	MyComplexObj *obj = [[MyComplexObj alloc] initWithJson:aJsonString andCollectionMaps:[JsonCollectionMap map:@"arrayOfDingus" toClass:Dingus.class],
+																						 [JsonCollectionMap map:@"arrayOfFoo" toClass:Foo.class], nil];
+	
+The easiest way to deal with this is to have the target class override initWithJson to set up these maps.  
+
+	@implementation MyComplexObj
+	
+	- (id)initWithJson:(NSString *)jsonString {
+		return [self initWithJson:jsonString andCollectionMaps:[JsonCollectionMap map:@"arrayOfDingus" toClass:Dingus.class],
+															   [JsonCollectionMap map:@"arrayOfFoo" toClass:Foo.class], nil];
+	}
+	
+	@end
+	
+Then parsing again becomes a matter of:
+
+	MyComplexObj *myObj = [[MyComplexObj alloc] initWithJson:jsonString];
+
+The caveat with this approach is that your mappings will apply to all properties in the json tree.  So any property of field type arrayOfDingus or arrayOfFoo will now be mapped to the given classes.  If two different classes declare two collection properties of the same name but different content types, then that will cause problems.
+
+#### Plain collections
+
+If the result is just a simple array and not necessarily an object:
+
+NSArray *arrayOfDingus = [[NSDingus alloc] initWithArray:jsonArrayString andMappings:...collection maps...];
 
 SBJson (aka json-framework)
 ===========================
