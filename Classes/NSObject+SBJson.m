@@ -121,7 +121,7 @@
             } else if ([className isEqualToString:@"NSDictionary"]) {
                 [self parseDictionary:mappingDictionary key:key val:val];
             } else if ([className isEqualToString:@"NSString"]) {
-                [self setValue:val forKey:key];
+                [self setValue:[self stringFromX:val] forKey:key];
             } else if ([className isEqualToString:@"NSDecimalNumber"]) {
                 [self setValue:[NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%@", val]] forKey:key];
             } else if ([className isEqualToString:@"NSDate"]) {
@@ -137,6 +137,18 @@
         }
     }
     return self;
+}
+
+/*!
+  Used when the target class is a string. We handle the odd cases where the 
+  json is an NSNumber but the field is a string.  The unerlying json parser
+  has no wayt to know this so we allow for it.
+ */
+- (NSString *) stringFromX:(id)val{
+    if(val == nil || val == [NSNull null]){
+        return nil;
+    }
+    return [NSString stringWithFormat:@"%@",val];
 }
 
 - (NSDate *)parseDate:(NSString *)dateString {
