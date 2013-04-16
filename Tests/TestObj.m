@@ -23,10 +23,4 @@
     return self;
 }
 
-- (void)dealloc {
-    self.foo = nil;
-    self.bar = nil;
-    [super dealloc];
-}
-
 @end

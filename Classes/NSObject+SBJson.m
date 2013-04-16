@@ -42,7 +42,7 @@
 @implementation NSObject (NSObject_SBJsonWriting)
 
 - (NSString *)JSONRepresentation {
-    SBJsonWriter *writer = [[[SBJsonWriter alloc] init] autorelease];    
+    SBJsonWriter *writer = [[SBJsonWriter alloc] init];    
     NSString *json = [writer stringWithObject:self];
     if (!json)
         NSLog(@"-JSONRepresentation failed. Error is: %@", writer.error);
@@ -66,10 +66,8 @@
                             newVal = [[c alloc] initWithDictionary:obj andMappings:mappingDictionary];
                         }
                         [newArr addObject:newVal];
-                        [newVal release];
                     }
                     [self setValue:newArr forKey:key];
-                    [newArr release];
                 }
 }
 
@@ -83,10 +81,8 @@
                         NSDictionary *valueDict = [val valueForKey:subkey];
                         id newVal = [[c alloc] initWithDictionary:valueDict andMappings:mappingDictionary];
                         [newDict setValue:newVal forKey:subkey];
-                        [newVal release];
                     }
                     [self setValue:newDict forKey:key];
-                    [newDict release];
                 }
 }
 
@@ -271,7 +267,7 @@
 
 - (id)asJsonCompatibleObject {
     if ([self isKindOfClass:NSDictionary.class]) {
-        NSMutableDictionary *newDict = [[[NSMutableDictionary alloc] init] autorelease];
+        NSMutableDictionary *newDict = [[NSMutableDictionary alloc] init];
         for (NSString *key in [(NSDictionary *)self keyEnumerator]) {
             NSObject *oldVal = [(NSDictionary *)self objectForKey:key];
             [newDict setValue:[oldVal asJsonCompatibleObject] forKey:key];
@@ -295,7 +291,7 @@
     } else {
         unsigned int propCount;
         objc_property_t *props = class_copyPropertyList(self.class, &propCount);
-        NSMutableDictionary *d = [[[NSMutableDictionary alloc] init] autorelease];
+        NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
         for (int i = 0; i < propCount; i++) {
             objc_property_t prop = props[i];
             NSString *propName = [NSString stringWithUTF8String:property_getName(prop)];
@@ -324,7 +320,7 @@
 @implementation NSString (NSString_SBJsonParsing)
 
 - (id)JSONValue {
-    SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
+    SBJsonParser *parser = [[SBJsonParser alloc] init];
     id repr = [parser objectWithString:self];
     if (!repr)
         NSLog(@"-JSONValue failed. Error is: %@", parser.error);

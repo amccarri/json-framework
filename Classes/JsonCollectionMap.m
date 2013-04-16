@@ -24,7 +24,7 @@
 }
 
 + (JsonCollectionMap *)map:(NSString *)fieldName toClass:(Class)className {
-    JsonCollectionMap *map = [[[JsonCollectionMap alloc] init] autorelease];
+    JsonCollectionMap *map = [[JsonCollectionMap alloc] init];
     map.fieldName = fieldName;
     map.clazz = className;
     return map;

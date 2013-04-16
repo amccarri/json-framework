@@ -42,8 +42,6 @@
 }
 
 - (void)tearDown {
-    [parser release];
-    [writer release];
 }
 
 - (NSString*)otherFileName {

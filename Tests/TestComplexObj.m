@@ -47,23 +47,15 @@
         t.foo = [NSString stringWithFormat:@"foo %d", i];
         t.bar = [NSString stringWithFormat:@"bar %d", i];
         [arr addObject:t];
-        [t release];
     }
     return [NSArray arrayWithArray:arr];
 }
 
 - (TestObj *)buildTestObj {
-    TestObj *t = [[[TestObj alloc] init] autorelease];
+    TestObj *t = [[TestObj alloc] init];
     t.foo = @"foo value";
     t.bar = @"bar value";
     return t;
-}
-
-- (void)dealloc {
-    self.myArray = nil;
-    self.myTestObj = nil;
-    self.myDictionary = nil;
-    [super dealloc];
 }
 
 @end

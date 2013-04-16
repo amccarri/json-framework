@@ -13,3 +13,5 @@ profile
 *~
 /.svn/*
 xcuserdata
+Debug/
+SBJson.build/
